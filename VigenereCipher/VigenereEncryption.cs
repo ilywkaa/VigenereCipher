@@ -31,7 +31,19 @@ namespace VigenereCipher
         }
 
 
-        public string Encrypt(string source, string key)
+        public IEnumerable<string> Encrypt(IEnumerable<string> source, string key)
+        {
+            List<string> result = new List<string>();
+            foreach (var s in source)
+            {
+                result.Add(EncryptSingle(s, key));
+            }
+
+            return result.AsEnumerable();
+        }
+
+
+        public string EncryptSingle(string source, string key)
         {
             Debug.Assert(source != null && key != null);
 
@@ -55,7 +67,19 @@ namespace VigenereCipher
         }
 
 
-        public string Dencrypt(string encrypted, string key)
+        public IEnumerable<string> Dencrypt(IEnumerable<string> source, string key)
+        {
+            List<string> result = new List<string>();
+            foreach (var s in source)
+            {
+                result.Add(DencryptSingle(s, key));
+            }
+
+            return result.AsEnumerable();
+        }
+
+
+        public string DencryptSingle(string encrypted, string key)
         {
             Debug.Assert(encrypted != null && key != null);
 

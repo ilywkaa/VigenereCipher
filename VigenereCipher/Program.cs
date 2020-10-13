@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VigenereCipher
 {
@@ -14,13 +15,32 @@ namespace VigenereCipher
         static void Main(string[] args)
         {
             Console.WriteLine("Enter string to encrypt.");
-            string source = Console.ReadLine();
+            string input = Console.ReadLine();
+
+            while (input == string.Empty)
+            {
+                Console.WriteLine("Repeat input, please.");
+                input = Console.ReadLine();
+            }
+
+            var source = input.Split();
 
             Console.WriteLine("Enter key of encryption.");
             string key = Console.ReadLine();
 
+            while (key == string.Empty)
+            {
+                Console.WriteLine("Repeat input, please.");
+                key = Console.ReadLine();
+            }
+
             var encryptor = new VigenereEncryption(Alphabet);
-            Console.WriteLine($"Encrypted string is : {encryptor.Encrypt(source, key)}");
+            IEnumerable<string> encrypted = encryptor.Encrypt(source, key);
+            Console.WriteLine("Encrypted strings : ");
+            foreach (var s in encrypted)
+            {
+                Console.WriteLine(s);
+            }
         }
     }
 }

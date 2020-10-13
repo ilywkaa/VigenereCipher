@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace VigenereCipher.Tests
@@ -20,52 +23,92 @@ namespace VigenereCipher.Tests
         }
 
         [Test]
-        public void EncryptTestDefault()
+        public void EncryptDefaultTest()
         {
-            string res = _encryptor.Encrypt("ATTACKATDAWN", "LEMON");
+            string res = _encryptor.EncryptSingle("ATTACKATDAWN", "LEMON");
             Assert.AreEqual("LXFOPVEFRNHR", res);
         }
 
         [Test]
-        public void EncryptTestLongStringSource()
+        public void EncryptLongStringSourceTest()
         {
-            string res = _encryptor.Encrypt("ATTACK AT DAWN ATTACK AT DAWN", "LEMON");
+            string res = _encryptor.EncryptSingle("ATTACK AT DAWN ATTACK AT DAWN", "LEMON");
             Assert.AreEqual("LXFOPVEFRNHRMHGLGWOGOEIB", res);
         }
 
         [Test]
-        public void EncryptTestWithDifferentRegisters()
+        public void EncryptWithDifferentRegistersTest()
         {
-            string res = _encryptor.Encrypt("ATTACkATDaWN", "lemon");
+            string res = _encryptor.EncryptSingle("ATTACkATDaWN", "lemon");
             Assert.AreEqual("LXFOPVEFRNHR", res);
         }
 
         [Test]
         public void EncryptTestSourceLessLengthThanKey()
         {
-            string res = _encryptor.Encrypt("sun", "lemon");
+            string res = _encryptor.EncryptSingle("sun", "lemon");
             Assert.AreEqual("DYZ", res);
         }
 
         [Test]
-        public void EncryptTestSourceSameLengthKey()
+        public void EncryptSourceSameLengthKeyTest()
         {
-            string res = _encryptor.Encrypt("ATTAC", "lemon");
+            string res = _encryptor.EncryptSingle("ATTAC", "lemon");
             Assert.AreEqual("LXFOP", res);
         }
 
         [Test]
-        public void DencryptTestDefault()
+        public void DencryptDefaultTest()
         {
-            string res = _encryptor.Dencrypt("LXFOPVEFRNHR", "LEMON");
+            string res = _encryptor.DencryptSingle("LXFOPVEFRNHR", "LEMON");
             Assert.AreEqual("ATTACKATDAWN", res);
         }
 
         [Test]
-        public void DencryptTestSourceSameLengthKey()
+        public void DencryptSourceSameLengthKeyTest()
         {
-            string res = _encryptor.Dencrypt("LXFO", "LEMON");
+            string res = _encryptor.DencryptSingle("LXFO", "LEMON");
             Assert.AreEqual("ATTA", res);
+        }
+
+        [Test]
+        public void EncryptMultipleStringsTest()
+        {
+            List<string> textToEncrypt = new List<string>()
+            {
+                "ATTACKATDAWN",
+                "ATTACKATDAWN",
+                "ATTACKATDAWN"
+            };
+            string key = "LEMON";
+            List<string> expected = new List<string>()
+            {
+                "LXFOPVEFRNHR",
+                "LXFOPVEFRNHR",
+                "LXFOPVEFRNHR"
+            };
+            IEnumerable<string> result = _encryptor.Encrypt(textToEncrypt.AsEnumerable(), key);
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void DencryptMultipleStringsTest()
+        {
+            List<string> textToEncrypt = new List<string>()
+            {
+                "LXFOPVEFRNHR",
+                "LXFOPVEFRNHR",
+                "LXFOPVEFRNHR"
+            };
+            string key = "LEMON";
+            List<string> expected = new List<string>()
+            {
+                "ATTACKATDAWN",
+                "ATTACKATDAWN",
+                "ATTACKATDAWN"
+            };
+            IEnumerable<string> result = _encryptor.Dencrypt(textToEncrypt.AsEnumerable(), key);
+            Assert.AreEqual(expected, result);
         }
     }
 }
